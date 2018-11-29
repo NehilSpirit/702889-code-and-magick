@@ -1,7 +1,4 @@
 'use strict';
-// Найдём и покажем окно настроек пользователя.
-var userDialog = document.querySelector('.setup');
-userDialog.classList.remove('hidden');
 
 /* Найдём шаблон, который мы будем копировать.
  И найдём элемент, в который мы будем вставлять похожих магов.
@@ -11,7 +8,18 @@ var similarWizardTemplate = document
   .querySelector('#similar-wizard-template')
   .content.querySelector('.setup-similar-item');
 
-/*
+/* переменные обработчиков*/
+var ENTER = 13;
+var ESC = 27;
+
+var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open-icon');
+var setupClose = setup.querySelector('.setup-close');
+var setupWizard = document.querySelector('.setup-wizard');
+var wizardCoat = setupWizard.querySelector('.wizard-coat');
+var wizardEyes = setupWizard.querySelector('.wizard-eyes');
+var wizardFireball = document.querySelector('.setup-fireball-wrap');
+
 /* Создаем массивы для рандомного выбора свойств обьекта волшебник */
 var firstNames = [
   'Иван',
@@ -43,6 +51,8 @@ var coatColors = [
   'rgb(0, 0, 0)'
 ];
 var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
+
+var fireBallColors = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
 var fragment = document.createDocumentFragment();
 
@@ -80,7 +90,7 @@ var renderWizard = function (wizard) {
 /* Отрисовка сгенерированныч DOM-элементов в блок .setup-similar-list.
 Для вставки элементов используутся DocumentFragment. */
 var appendWizard = function () {
-  simillarWizards = createArray(4);      // формируем массив из 4 значений
+  simillarWizards = createArray(4); // формируем массив из 4 значений
   for (var i = 0; i < simillarWizards.length; i++) {
     fragment.appendChild(renderWizard(simillarWizards[i]));
   }
@@ -90,4 +100,68 @@ var appendWizard = function () {
 
 appendWizard(simillarWizards);
 
+/* основные сценарии взаимодействия пользователя с сайтом*/
 
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC) {
+    closePopup();
+  }
+};
+/* Открыие окна настроек*/
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+/* Закрыие окна настроек*/
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER) {
+    openPopup();
+  }
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER) {
+    closePopup();
+  }
+});
+
+/* Изменение цвета мантии персонажа по нажатию.*/
+wizardCoat.addEventListener('click', function () {
+  wizardCoat.style.fill = getRandom(coatColors);
+});
+
+/* Изменение цвета глаз персонажа по нажатию.*/
+wizardEyes.addEventListener('click', function () {
+  wizardEyes.style.fill = getRandom(eyesColors);
+});
+/* Изменение цвета фаерболов по нажатию. */
+wizardFireball.addEventListener('click', function () {
+  wizardFireball.style.backgroundColor = getRandom(fireBallColors);
+});
+
+
+/* Если не сложно нужна подсказка для следующих двух пунктов
+
+1. Для того, чтобы на сервер отправились правильные данные, при изменении 
+параметров персонажа должно изменяться и значение соответствующего скрытого инпута.
+(как мпуты привязать ? они без классов)
+
+2. Форма должна отправляться на урл https://js.dump.academy/code-and-magick 
+методом POST с типом multipart/form-data
+(тут нашла только что то про php файлы, но врядли нуждо создавать php файл
+  Не поняла суть задания)
+*/
