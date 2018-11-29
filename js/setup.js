@@ -152,14 +152,3 @@ wizardEyes.addEventListener('click', function () {
 wizardFireball.addEventListener('click', function () {
   wizardFireball.style.backgroundColor = getRandom(fireBallColors);
 });
-
-
-
-
-/* Если не сложно нужна подсказка для следующих двух пунктов
-
-1. Для того, чтобы на сервер отправились правильные данные, при изменении 
-параметров персонажа должно изменяться и значение соответствующего скрытого инпута.
-(как мпуты привязать ? они без классов)
-
-
