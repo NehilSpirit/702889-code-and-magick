@@ -105,7 +105,7 @@ var appendWizard = function () {
 appendWizard(simillarWizards);
 
 /* основные сценарии взаимодействия пользователя с сайтом*/
-/*окно настроек открыто и поле ввода имени не фокус, нажатие Esc закрывает окно */
+/* окно настроек открыто и поле ввода имени не фокус, нажатие Esc закрывает окно*/
 var onPopupEscPress = function (evt) {
   if ((evt.keyCode === ESC) && !(inputUserName === document.activeElement)) {
     closePopup();
