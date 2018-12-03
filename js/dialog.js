@@ -1,56 +1,63 @@
+/* eslint-disable no-unused-vars */
 
 'use strict';
-(function () {
-  var setup = document.querySelector('.setup');
-  var dialogHandle = setup.querySelector('.upload');
-  var startCoords = {};
-  var dragged = '';
 
-  dialogHandle.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+var DEFAULT_X = 50 + '%';
+var DEFAULT_Y = 80 + 'px';
+var setup = document.querySelector('.setup');
+var dialogHandle = setup.querySelector('.upload');
+var startCoords = {};
+var dragged = '';
 
-    startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+dialogHandle.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
 
-    dragged = false;
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-
-  var onMouseMove = function (evt) {
-    var moveEvt = evt;
-    moveEvt.preventDefault();
-
-    var shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
-    };
-
-    startCoords = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
-    };
-
-    setup.style.top = setup.offsetTop - shift.y + 'px';
-    setup.style.left = setup.offsetLeft - shift.x + 'px';
+  startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
   };
 
-  var onMouseUp = function (upEvt) {
-    upEvt.preventDefault();
+  dragged = false;
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 
+var onMouseMove = function (evt) {
+  var moveEvt = evt;
+  moveEvt.preventDefault();
 
-    if (dragged) {
-      var onClickPreventDefault = function (evt) {
-        evt.preventDefault();
-        dialogHandle.removeEventListener('click', onClickPreventDefault);
-      };
-      dialogHandle.addEventListener('click', onClickPreventDefault);
-    }
-
-
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
+  var shift = {
+    x: startCoords.x - moveEvt.clientX,
+    y: startCoords.y - moveEvt.clientY
   };
-})();
+
+  startCoords = {
+    x: moveEvt.clientX,
+    y: moveEvt.clientY
+  };
+
+  setup.style.top = setup.offsetTop - shift.y + 'px';
+  setup.style.left = setup.offsetLeft - shift.x + 'px';
+};
+
+var onMouseUp = function (upEvt) {
+  upEvt.preventDefault();
+
+
+  if (dragged) {
+    var onClickPreventDefault = function (evt) {
+      evt.preventDefault();
+      dialogHandle.removeEventListener('click', onClickPreventDefault);
+    };
+    dialogHandle.addEventListener('click', onClickPreventDefault);
+  }
+
+  document.removeEventListener('mousemove', onMouseMove);
+  document.removeEventListener('mouseup', onMouseUp);
+};
+
+var getDefaultPlase = function () {
+  setup.style.top = DEFAULT_Y;
+  setup.style.left = DEFAULT_X;
+};
+

@@ -109,6 +109,7 @@ appendWizard(simillarWizards);
 var onPopupEscPress = function (evt) {
   if ((evt.keyCode === ESC) && !(inputUserName === document.activeElement)) {
     closePopup();
+    window.getDefaultPlase();
   }
 };
 /* Открыие окна настроек*/
@@ -119,6 +120,7 @@ var openPopup = function () {
 /* Когда окно настройки персонажа открыто, нажатие на клавишу ESC должно закрывать диалог*/
 var closePopup = function () {
   setup.classList.add('hidden');
+  window.getDefaultPlase();
   document.removeEventListener('keydown', onPopupEscPress);
 };
 /* Окно.setup должно открываться по нажатию на блок.setup-open.
