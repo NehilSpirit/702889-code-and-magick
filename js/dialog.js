@@ -1,63 +1,57 @@
-/* eslint-disable no-unused-vars */
 
 'use strict';
+(function () {
 
-var DEFAULT_X = 50 + '%';
-var DEFAULT_Y = 80 + 'px';
-var setup = document.querySelector('.setup');
-var dialogHandle = setup.querySelector('.upload');
-var startCoords = {};
-var dragged = '';
+  /* основные сценарии взаимодействия пользователя с сайтом*/
+  /* окно настроек открыто и поле ввода имени не фокус, нажатие Esc закрывает окно*/
+  /* переменные обработчиков*/
+  var ENTER = 13;
+  var ESC = 27;
+  var setup = document.querySelector('.setup');
+  var setupOpen = document.querySelector('.setup-open-icon');
+  var setupClose = document.querySelector('.setup-close');
+  var inputUserName = document.querySelector('.setup-user-name');
 
-dialogHandle.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
-
-  startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
+  var onPopupEscPress = function (evt) {
+    if ((evt.keyCode === ESC) && !(inputUserName === document.activeElement)) {
+      closePopup();
+      window.getDefaultPlase();
+    }
   };
-
-  dragged = false;
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
-});
-
-var onMouseMove = function (evt) {
-  var moveEvt = evt;
-  moveEvt.preventDefault();
-
-  var shift = {
-    x: startCoords.x - moveEvt.clientX,
-    y: startCoords.y - moveEvt.clientY
+  /* Открыие окна настроек*/
+  var openPopup = function () {
+    setup.classList.remove('hidden');
+    document.addEventListener('keydown', onPopupEscPress);
   };
-
-  startCoords = {
-    x: moveEvt.clientX,
-    y: moveEvt.clientY
+  /* Когда окно настройки персонажа открыто, нажатие на клавишу ESC должно закрывать диалог*/
+  var closePopup = function () {
+    setup.classList.add('hidden');
+    window.getDefaultPlase();
+    document.removeEventListener('keydown', onPopupEscPress);
   };
-
-  setup.style.top = setup.offsetTop - shift.y + 'px';
-  setup.style.left = setup.offsetLeft - shift.x + 'px';
-};
-
-var onMouseUp = function (upEvt) {
-  upEvt.preventDefault();
-
-
-  if (dragged) {
-    var onClickPreventDefault = function (evt) {
-      evt.preventDefault();
-      dialogHandle.removeEventListener('click', onClickPreventDefault);
-    };
-    dialogHandle.addEventListener('click', onClickPreventDefault);
-  }
-
-  document.removeEventListener('mousemove', onMouseMove);
-  document.removeEventListener('mouseup', onMouseUp);
-};
-
-var getDefaultPlase = function () {
-  setup.style.top = DEFAULT_Y;
-  setup.style.left = DEFAULT_X;
-};
+  /* Окно.setup должно открываться по нажатию на блок.setup-open.
+ Открытие окна производится удалением класса hidden у блока
+*/
+  setupOpen.addEventListener('click', function () {
+    openPopup();
+  });
+  /* Когда иконка пользователя в фокусе .setup-open-icon,
+то окно настройки персонажа открываться по нажатию кнопки ENTER*/
+  setupOpen.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER) {
+      openPopup();
+    }
+  });
+  /* Окно.setup должно закрываться по нажатию на элемент.setup-close, расположенный внутри окна*/
+  setupClose.addEventListener('click', function () {
+    closePopup();
+  });
+  /* Если окно открыто и фокус находится на кнопке закрытия окна,
+то нажатие клавиши ENTER должно приводить к закрытию диалога */
+  setupClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER) {
+      closePopup();
+    }
+  });
+})();
 
