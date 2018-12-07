@@ -53,5 +53,21 @@
       closePopup();
     }
   });
+  /* отменяет действие формы по умолчанию и отправляет данные формы
+   на сервер https://js.dump.academy/code-and-magick
+  А при успешной загрузке данных на сервер закрывает окно редактирования персонажа.*/
+  var form = document.querySelector('.setup-wizard-form');
+  var formData = new FormData(form);
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.save(formData, window.onSucsess, window.onError);
+    if (window.onSucsess) {
+      setup.classList.add('hidden');
+      alert('Данные успешно отправлены');
+    } else {
+      alert('Попробуйте еще раз');
+    }
+  });
+
 })();
 

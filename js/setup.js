@@ -17,7 +17,7 @@
   var inputFireball = document.querySelector('.input-fireball');
 
   /* Создаем массивы для рандомного выбора свойств обьекта волшебник */
-  var firstNames = [
+  /* var firstNames = [
     'Иван',
     'Хуан',
     'Себастьян',
@@ -37,7 +37,7 @@
     'Топольницкая',
     'Нионго',
     'Ирвинг'
-  ];
+  ]; */
   var coatColors = [
     'rgb(101, 137, 164)',
     'rgb(241, 43, 107)',
@@ -60,15 +60,16 @@
   };
 
   /* Создаem массив, состоящий из 4 сгенерированных JS объектов, которые будут описывать похожих персонажей. */
-  var createArray = function (wizardNum) {
+  var createArray = function (wizardNum, array) {
     var wizards = [];
     for (var i = 0; i < wizardNum; i++) {
-      var simillarWizard = {};
-      simillarWizard.name = getRandom(firstNames) + ' ' + getRandom(secondNames);
+      // var simillarWizard = {};
+      getRandom(array);
+      /* simillarWizard.name = getRandom(firstNames) + ' ' + getRandom(secondNames);
       simillarWizard.coatColor = getRandom(coatColors);
-      simillarWizard.eyesColor = getRandom(eyesColors);
+      simillarWizard.eyesColor = getRandom(eyesColors);*/
 
-      wizards.push(simillarWizard);
+      wizards.push(getRandom(array)); // simillarWizard
     }
     return wizards;
   };
@@ -77,16 +78,16 @@
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
 
   /* Отрисовка сгенерированныч DOM-элементов в блок .setup-similar-list.
 Для вставки элементов используутся DocumentFragment. */
-  var appendWizard = function () {
-    simillarWizards = createArray(4); // формируем массив из 4 значений
+  var appendWizard = function (array) {
+    // simillarWizards = createArray(4); // формируем массив из 4 значений
     for (var i = 0; i < simillarWizards.length; i++) {
       fragment.appendChild(renderWizard(simillarWizards[i]));
     }
@@ -113,4 +114,15 @@
     wizardFireball.style.background = inputFireball.value;
     inputFireball.value = getRandom(fireBallColors);
   });
+
+  var onLoad = function (data) {
+    console.log(data);
+    /* Вот тут все через жопу ибо я хочу функцию onLoad использовать не один раз.
+     но не знаю как получить из нее волшебников так чтоб не сунуть в нее вызов других функций 
+     да и надо ее вынести в глобальную область ибо пользуются 2 модуля */
+    simillarWizards = createArray(4, data);
+    appendWizard(simillarWizards);
+    // return data;
+  };
+  window.load(onLoad, window.onError);
 })();

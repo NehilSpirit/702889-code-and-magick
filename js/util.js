@@ -8,4 +8,14 @@
     setup.style.top = DEFAULT_Y;
     setup.style.left = DEFAULT_X;
   };
+  window.onError = function (message) {
+    // eslint-disable-next-line no-console
+    console.error(message);
+  };
+  /* тут все тоже плохо ибо никакой onSucsess быть не должно, а должно использовать
+onLoad, но она занята*/
+  window.onSucsess = function (info) {
+  // return info;
+   console.log(info);
+  };
 })();
